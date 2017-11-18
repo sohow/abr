@@ -1,4 +1,5 @@
 #coding:utf-8
+from Tool.Config import Tool_Config
 import time
 from selenium import webdriver
 from pyvirtualdisplay import Display
@@ -26,6 +27,7 @@ class Jd:
 	def login(self, name, passwd):
 		self.__driver.get('https://passport.jd.com/uc/login')
 		time.sleep(3)
+		print self.__driver.title
 		self.__driver.find_element_by_link_text("账户登录").click()
 		time.sleep(1)
 		self.__driver.find_element_by_id("loginname").send_keys(name)
@@ -38,10 +40,15 @@ class Jd:
 	def sign(self):
 		self.__driver.get("http://vip.jd.com/home.html")
 		time.sleep(3)
+		print self.__driver.title
 		self.__driver.find_element_by_id("signIn").click()
 
 if __name__ == "__main__":
+	conf = Tool_Config.get("jd")
 	jd = Jd()
-	jd.login("username", "password")
-	jd.sign()
+	try:
+		jd.login(conf["username"], conf["password"])
+		jd.sign()
+	except:
+		print "except"
 	del jd
