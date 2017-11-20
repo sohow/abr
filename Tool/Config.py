@@ -1,9 +1,11 @@
 #coding=utf8
+from os import path
 from ConfigParser import ConfigParser
 
 class Tool_Config:
 	@staticmethod
 	def get(key, filename="config.ini"):
+		filename = path.dirname(path.dirname(__file__)) + "/" + filename
 		config = ConfigParser()
 		config.read(filename)
 		keys = key.split(".")
