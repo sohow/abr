@@ -1,4 +1,5 @@
 #coding:utf-8
+import sys
 from Tool.Config import Tool_Config
 import time
 from selenium import webdriver
@@ -17,12 +18,13 @@ class Jd:
 		self.__headless = headless
 		options = webdriver.ChromeOptions()
         	options.add_argument("--no-sandbox")
+        	options.add_argument("--start-maximized")
 	        self.__driver = webdriver.Chrome(chrome_options=options)
 
 	def __del__(self):
-		self.__driver.quit()
 		if self.__headless == True:
                         self.__display.stop()
+			self.__driver.quit()
 
 	def login(self, name, passwd):
 		self.__driver.get('https://passport.jd.com/uc/login')
@@ -45,10 +47,12 @@ class Jd:
 
 if __name__ == "__main__":
 	conf = Tool_Config.get("jd")
-	jd = Jd()
+	headless = False if len(sys.argv) > 1 and sys.argv[1] == "show" else True
+	jd = Jd(headless)
 	try:
 		jd.login(conf["username"], conf["password"])
 		jd.sign()
 	except:
 		print "except"
-	del jd
+	if headless == True:
+		del jd
