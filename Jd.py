@@ -31,7 +31,7 @@ class Jd:
     def login(self, name, passwd):
         self.__driver.get('https://passport.jd.com/uc/login')
         time.sleep(3)
-        print self.__driver.title
+        print(self.__driver.title)
         self.__driver.find_element_by_link_text("账户登录").click()
         time.sleep(1)
         self.__driver.find_element_by_id("loginname").send_keys(name)
@@ -45,7 +45,7 @@ class Jd:
     def sign(self):
         self.__driver.get("http://vip.jd.com/home.html")
         time.sleep(3)
-        print self.__driver.title
+        print(self.__driver.title)
         self.__driver.find_element_by_id("signIn").click()
 
     def shop_sign(self):
@@ -57,7 +57,7 @@ class Jd:
             try:
                 self.shop_sign_page()
             except Exception, e:
-                print 'repr(e):\t', repr(e)
+                print(repr(e))
 
     def shop_sign_page(self):
         ele_btns = self.__driver.find_elements_by_class_name("s-btn")
@@ -89,6 +89,6 @@ if __name__ == "__main__":
         jd.sign()
         jd.shop_sign()
     except Exception, e:
-        print 'repr(e):\t', repr(e)
+        print(repr(e))
     if headless == True:
         del jd
