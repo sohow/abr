@@ -46,7 +46,10 @@ class Jd:
         self.__driver.get("http://vip.jd.com/home.html")
         time.sleep(3)
         print(self.__driver.title)
-        self.__driver.find_element_by_id("signIn").click()
+        try:
+            self.__driver.find_element_by_id("signIn").click()
+        except Exception as e:
+            print("signed")
 
     def shop_sign(self):
         self.__driver.get("https://bean.jd.com/myJingBean/list")
@@ -56,7 +59,7 @@ class Jd:
             ele_page.click()
             try:
                 self.shop_sign_page()
-            except Exception, e:
+            except Exception as e:
                 print(repr(e))
 
     def shop_sign_page(self):
@@ -88,7 +91,7 @@ if __name__ == "__main__":
         jd.login(conf["username"], conf["password"])
         jd.sign()
         jd.shop_sign()
-    except Exception, e:
+    except Exception as e:
         print(repr(e))
     if headless == True:
         del jd
