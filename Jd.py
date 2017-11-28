@@ -1,6 +1,5 @@
 # coding:utf-8
 import sys
-import traceback
 from Tool.Config import Tool_Config
 import time
 from selenium import webdriver
@@ -40,7 +39,6 @@ class Jd:
         time.sleep(1)
         self.__driver.find_element_by_id("nloginpwd").send_keys(Keys.ENTER)
         time.sleep(3)
-        #self.__driver.close()
 
     def sign(self):
         self.__driver.get("http://vip.jd.com/home.html")
@@ -50,6 +48,7 @@ class Jd:
             self.__driver.find_element_by_id("signIn").click()
         except Exception as e:
             print("signed")
+	time.sleep(3)
 
     def shop_sign(self):
         self.__driver.get("https://bean.jd.com/myJingBean/list")
@@ -57,6 +56,7 @@ class Jd:
         ele_pages = self.__driver.find_elements_by_class_name("p-item")
         for ele_page in ele_pages:
             ele_page.click()
+            time.sleep(1)
             try:
                 self.shop_sign_page()
             except Exception as e:
@@ -66,13 +66,29 @@ class Jd:
         ele_btns = self.__driver.find_elements_by_class_name("s-btn")
         list_window = self.__driver.current_window_handle
         for ele_btn in ele_btns:
-            ele_btn.click()
+            try:
+                ele_btn.click()
+            except Exception as e:
+                continue
             time.sleep(3)
             shop_window = self.__driver.window_handles[1]
             self.__driver.switch_to.window(shop_window)
-            self.__driver.find_element_by_link_text("签到").click()
+            time.sleep(1)
+            try:
+                self.__driver.find_element_by_link_text("签到").click()
+            except Exception as e:
+                print(repr(e))
+                self.__driver.switch_to.window(list_window)
+                continue
             time.sleep(3)
-
+            try:
+                self.__driver.find_element_by_link_text("领取并关注").click()
+                print("有个礼包砸中了")
+                time.sleep(1)
+                self.__driver.find_element_by_link_text("签到").click()
+                time.sleep(3)
+            except Exception as e:
+                print(repr(e))
             if len(self.__driver.window_handles) >= 3:
                 sign_window = self.__driver.window_handles[2]
                 self.__driver.close()
